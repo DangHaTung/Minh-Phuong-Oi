@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Minh Phuong oiiii</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Dancing+Script:wght@700&display=swap');
+
+    /* ── KEYFRAMES ── */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes floatAnimation {
+      0%,100% { transform: translateY(0px) rotate(-1deg); }
+      50%     { transform: translateY(-14px) rotate(1deg); }
+    }
+    @keyframes bgShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position:  200% center; }
+    }
+    @keyframes glowPulse {
+      0%,100% {
+        box-shadow: 0 0 18px rgba(233,30,140,0.55),
+                    0 0 36px rgba(233,30,140,0.28),
+                    0 5px 22px rgba(0,0,0,0.14);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 30px rgba(233,30,140,1),
+                    0 0 60px rgba(233,30,140,0.55),
+                    0 5px 22px rgba(0,0,0,0.14);
+        transform: scale(1.08);
+      }
+    }
+    @keyframes shake {
+      0%   { transform: translateX(0); }
+      25%  { transform: translateX(-7px) rotate(-2.5deg); }
+      50%  { transform: translateX(7px)  rotate(2.5deg); }
+      75%  { transform: translateX(-4px) rotate(-1deg); }
+      100% { transform: translateX(0); }
+    }
+    @keyframes fall {
+      0%   { transform: translateY(-60px) rotate(0deg);   opacity: 0.9; }
+      100% { transform: translateY(108vh) rotate(720deg); opacity: 0;   }
+    }
+    @keyframes sway {
+      0%,100% { margin-left:  0px; }
+      30%     { margin-left:  22px; }
+      70%     { margin-left: -22px; }
+    }
+    @keyframes cardPop {
+      0%   { opacity: 0; transform: scale(0.82) translateY(44px); }
+      65%  { transform: scale(1.03) translateY(-4px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    /* viền chạy vòng */
+    @keyframes borderRun {
+      0%   { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
+    }
+    /* aurora blobs */
+    @keyframes blobA {
+      0%,100% { transform: translate(0,0)      scale(1);    }
+      33%     { transform: translate(60px,-40px) scale(1.15); }
+      66%     { transform: translate(-40px,30px) scale(0.9);  }
+    }
+    @keyframes blobB {
+      0%,100% { transform: translate(0,0)       scale(1);   }
+      40%     { transform: translate(-50px,50px) scale(1.2); }
+      75%     { transform: translate(40px,-30px) scale(0.88);}
+    }
+    @keyframes blobC {
+      0%,100% { transform: translate(0,0)        scale(1);    }
+      50%     { transform: translate(30px, 60px) scale(1.1);  }
+    }
+    /* sparkle nhấp nháy */
+    @keyframes twinkle {
+      0%,100% { opacity: 0; transform: scale(0.4) rotate(0deg);   }
+      50%     { opacity: 1; transform: scale(1)   rotate(180deg); }
+    }
+    /* hào quang ảnh */
+    @keyframes auraGlow {
+      0%,100% { filter: drop-shadow(0 0 10px rgba(233,30,140,0.35)) drop-shadow(0 8px 20px rgba(217,111,133,0.3)); }
+      50%     { filter: drop-shadow(0 0 24px rgba(233,30,140,0.75)) drop-shadow(0 8px 24px rgba(217,111,133,0.5)); }
+    }
+    /* ripple nút yes */
+    @keyframes ripple {
+      0%   { transform: scale(0); opacity: 0.5; }
+      100% { transform: scale(4); opacity: 0;   }
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: linear-gradient(-45deg, #f9a8c0, #ffd6e7, #ffb3c6, #fce4ec, #f48fb1, #ffd1dc);
+      background-size: 400% 400%;
+      animation: bgShift 8s ease infinite;
+      font-family: 'Nunito', 'Arial', sans-serif;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* ── AURORA BLOBS ── */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(70px);
+      pointer-events: none;
+      z-index: 0;
+      mix-blend-mode: multiply;
+    }
+    .blob-a {
+      width: 380px; height: 380px;
+      background: rgba(249,168,192,0.55);
+      top: -80px; left: -80px;
+      animation: blobA 12s ease-in-out infinite;
+    }
+    .blob-b {
+      width: 320px; height: 320px;
+      background: rgba(244,143,177,0.5);
+      bottom: -60px; right: -60px;
+      animation: blobB 14s ease-in-out infinite;
+    }
+    .blob-c {
+      width: 260px; height: 260px;
+      background: rgba(255,182,213,0.45);
+      top: 50%; left: 60%;
+      animation: blobC 10s ease-in-out infinite;
+    }
+
+    /* ── CARD VIỀN LẤP LÁNH ── */
+    #content-wrapper {
+      position: relative;
+      border-radius: 32px;
+      padding: 2px;
+      /* gradient chạy vòng tạo viền */
+      background: linear-gradient(90deg,
+        #f48fb1, #e91e8c, #ff4081, #f06292,
+        #ce93d8, #90caf9, #f48fb1, #e91e8c);
+      background-size: 300% 300%;
+      animation: borderRun 4s linear infinite;
+      box-shadow:
+        0 8px 40px rgba(233,30,140,0.22),
+        0 2px 12px rgba(0,0,0,0.07);
+      z-index: 1;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    /* CARD KÍNH */
+    #content {
+      width: 100%;
+      padding: 40px 30px 35px;
+      background: rgba(255,255,255,0.42);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border-radius: 30px;
+      border: none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
+      animation: cardPop 0.9s cubic-bezier(0.34,1.56,0.64,1) both;
+      position: relative;
+    }
+
+    /* ── ẢNH + HÀO QUANG ── */
+    #mainImage {
+      width: 160px;
+      max-width: 80%;
+      height: auto;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      margin: 0 auto 5px;
+      animation: fadeIn 1s ease, floatAnimation 3.5s ease-in-out infinite, auraGlow 3s ease-in-out infinite;
+      will-change: transform, opacity, filter;
+    }
+
+    /* ── LABEL SPARKLE ── */
+    .label-top {
+      font-size: 13px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(194,24,91,0.6);
+      margin-bottom: 2px;
+      animation: fadeIn 1s ease 0.2s backwards;
+      font-weight: 700;
+      position: relative;
+      display: inline-block;
+    }
+    .label-top::before,
+    .label-top::after {
+      content: '✦';
+      display: inline-block;
+      margin: 0 6px;
+      animation: twinkle 2s ease-in-out infinite;
+    }
+    .label-top::after { animation-delay: 1s; }
+
+    /* ── CHỮ SHIMMER ── */
+    #question {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(90deg,
+        #c2185b, #e91e8c, #ff4081, #ff80ab,
+        #e91e8c, #c2185b, #e91e8c, #ff4081);
+      background-size: 200% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: fadeIn 1s ease 0.3s backwards, shimmer 3.5s linear infinite;
+      line-height: 1.45;
+      margin: 8px 0 0;
+      padding: 0 10px;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #e91e8c, transparent);
+      border-radius: 99px;
+      margin: 18px auto;
+      animation: fadeIn 1s ease 0.5s backwards;
+      position: relative;
+    }
+    .divider::before {
+      content: '♡';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      font-size: 12px;
+      color: #e91e8c;
+      background: rgba(255,255,255,0.42);
+      padding: 0 4px;
+    }
+
+    /* ── BUTTONS ── */
+    .buttons {
+      margin-top: 22px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 0 10px;
+      animation: fadeIn 1s ease 0.7s backwards;
+    }
+
+    button {
+      font-family: 'Nunito', 'Arial', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      padding: 13px 36px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      position: relative;
+      overflow: hidden;
+      color: white;
+      will-change: transform;
+      letter-spacing: 0.5px;
+    }
+    button:active { transform: translateY(3px) scale(0.95) !important; }
+
+    /* shimmer sweep */
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -120%;
+      width: 60%; height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.45), transparent);
+      transition: left 0.55s ease;
+      pointer-events: none;
+    }
+    button:hover::before { left: 160%; }
+
+    /* ripple circle */
+    .ripple-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.4);
+      width: 80px; height: 80px;
+      margin-top: -40px; margin-left: -40px;
+      animation: ripple 0.6s linear forwards;
+      pointer-events: none;
+    }
+
+    #yes {
+      background: linear-gradient(135deg, #e91e8c, #ff4081, #f06292);
+      animation: glowPulse 2s ease-in-out infinite;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.18);
+    }
+    #no {
+      background: linear-gradient(135deg, #7986cb, #5c6bc0, #7e57c2);
+      box-shadow: 0 4px 20px rgba(92,107,192,0.4);
+    }
+    #no:hover {
+      box-shadow: 0 6px 26px rgba(92,107,192,0.65);
+      transform: translateY(-3px);
+    }
+    button:disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+
+    .shake { animation: shake 0.35s ease; }
+
+    /* ── TIM RƠI ── */
+    .heart {
+      position: fixed;
+      animation: fall linear, sway ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 0;
+      will-change: transform, opacity;
+      user-select: none;
+    }
+    .heart.gathering {
+      position: fixed !important;
+      transition: transform 4s ease-in-out, opacity 4s ease-in-out;
+      animation: none !important;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      body { padding: 15px; }
+      #content { padding: 30px 20px 25px; }
+      #question { font-size: 20px; }
+      #mainImage { width: 130px; }
+      button { font-size: 15px; padding: 11px 26px; }
+      .buttons { gap: 12px; }
+    }
+    @media (max-width: 480px) {
+      #question { font-size: 17px; }
+      button { font-size: 14px; padding: 10px 22px; }
+      .buttons { flex-direction: column; align-items: center; gap: 10px; }
+      #yes, #no { width: 100%; max-width: 200px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Aurora blobs -->
+  <div class="blob blob-a"></div>
+  <div class="blob blob-b"></div>
+  <div class="blob blob-c"></div>
+
+  <div id="content-wrapper">
+    <div id="content">
+      <img id="mainImage" src="image/heart.png" alt="start" />
+      <p class="label-top">for you</p>
+      <div id="question">Dear Minh Phương,</div>
+      <div id="question">Em có yêu anh không? 🥺</div>
+      <div class="divider"></div>
+      <div class="buttons">
+        <button id="yes">💖 có</button>
+        <button id="no">không</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const yesBtn = document.getElementById("yes");
+    const noBtn = document.getElementById("no");
+    const mainImage = document.getElementById("mainImage");
+
+    // Tạo audio elements
+    const romanticAudio = new Audio('audio/nhaclanman.mp3');
+    const nhaclanmanAudio = new Audio('audio/khoctiengman.mp3');
+    
+    romanticAudio.volume = 0.5;
+    nhaclanmanAudio.volume = 0.3;
+    romanticAudio.loop = true;
+    nhaclanmanAudio.loop = true;
+
+    let index = 0;
+    let yesScale = 1;
+    let audioUnlocked = false;
+
+    // Mở khóa audio sau lần tương tác đầu tiên
+    function unlockAudio() {
+      if (audioUnlocked) return;
+      audioUnlocked = true;
+      // Phát và dừng ngay để "mở khóa" audio context
+      const unlock1 = romanticAudio.play();
+      if (unlock1) unlock1.then(() => romanticAudio.pause()).catch(() => {});
+      const unlock2 = nhaclanmanAudio.play();
+      if (unlock2) unlock2.then(() => nhaclanmanAudio.pause()).catch(() => {});
+    }
+
+    document.body.addEventListener('click', unlockAudio, { once: true });
+    
+    // hover nút No không cần phát nhạc nữa vì đã loop khi click
+
+    const imageLinks = [
+      "image/shocked.png",
+      "image/think.png",
+      "image/angry.png",
+      "image/crying.png",
+      "image/crying.png",
+      "image/crying.png",
+      "image/crying.png",
+      "image/crying.png",
+      "image/crying.png",
+      "image/crying.png",
+      "image/crying.png",
+       "image/crying.png",
+      "image/crying.png",
+      "image/crying.png",
+      "image/crying.png",
+      "image/crying.png",
+      "image/crying.png",
+      "image/crying.png",
+      "image/crying.png"
+    ];
+
+    const messages = [
+      "ơ… sao vậy 😨",
+      "em nghiêm túc chứ…",
+      "Nghĩ lại đi mà? 🥺",
+      "Không được chọn cái này!",
+      "anh sẽ buồn lắm đó… 😢",
+      "Không được đâu :(",
+      "Thật sự không yêu à…",
+      "anh sẽ khóc đấy 😭",
+      "Đừng mà… 😢",
+      "Đừng Minh Phương ơi… 😢",
+      "Đừng...",
+      "Ối rồi ôi! Đừngggggg..."
+    ];
+
+    // Lưu tất cả heart và interval
+    const activeHearts = [];
+    let heartInterval = null;
+
+    // Các emoji tim để random
+    const heartEmojis = ["❤️", "🧡", "💛", "💚", "💙", "💜", "🩷", "🩵", "🤍", "💖", "💗", "💓", "💞", "💕"];
+
+    // Tim rơi random (dùng emoji thay ảnh)
+    function createHeart(container) {
+      const target = container || document.body;
+      const heart = document.createElement("div");
+      heart.className = "heart";
+
+      const randomEmoji = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+      heart.textContent = randomEmoji;
+      heart.style.backgroundImage = "none";
+      heart.style.background = "none";
+      const size = 15 + Math.random() * 20;
+      heart.style.fontSize = size + "px";
+      heart.style.lineHeight = "1";
+      heart.style.width = "auto";
+      heart.style.height = "auto";
+
+      heart.style.left = Math.random() * 100 + "vw";
+
+      // Set fall và sway duration riêng biệt
+      const fallDuration = (2 + Math.random() * 3).toFixed(2) + "s";
+      const swayDuration = (1.5 + Math.random() * 2).toFixed(2) + "s";
+      heart.style.animationDuration = `${fallDuration}, ${swayDuration}`;
+
+      target.appendChild(heart);
+      activeHearts.push(heart);
+
+      setTimeout(() => {
+        const idx = activeHearts.indexOf(heart);
+        if (idx > -1) activeHearts.splice(idx, 1);
+        if (heart.parentNode) heart.remove();
+      }, 5000);
+    }
+
+    // Function để tụ tất cả heart về một điểm
+    function gatherHearts() {
+      // Dừng tạo heart mới
+      if (heartInterval) {
+        clearInterval(heartInterval);
+        heartInterval = null;
+      }
+
+      // Lấy vị trí của mainImage (điểm tụ) - tọa độ viewport
+      const mainImageRect = mainImage.getBoundingClientRect();
+      const targetX = mainImageRect.left + mainImageRect.width / 2;
+      const targetY = mainImageRect.top + mainImageRect.height / 2;
+
+      // Lấy tất cả heart đang tồn tại
+      const allHearts = document.querySelectorAll('.heart');
+      
+      allHearts.forEach(heart => {
+        const heartRect = heart.getBoundingClientRect();
+        const currentX = heartRect.left + heartRect.width / 2;
+        const currentY = heartRect.top + heartRect.height / 2;
+        
+        // Tính toán khoảng cách cần di chuyển
+        const deltaX = targetX - currentX;
+        const deltaY = targetY - currentY;
+
+        // Gỡ animation fall hiện tại và đặt lại vị trí cố định
+        heart.style.animation = 'none';
+        heart.style.left = currentX + 'px';
+        heart.style.top = currentY + 'px';
+        heart.style.transform = 'translateZ(0)';
+        heart.style.opacity = '1';
+        
+        // Thêm class gathering để có transition
+        heart.classList.add('gathering');
+        
+        // Đợi frame tiếp theo để đảm bảo transition hoạt động
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            // Áp dụng transform để di chuyển về điểm tụ
+            heart.style.transform = `translate(${deltaX}px, ${deltaY}px) translateZ(0) scale(0)`;
+            heart.style.opacity = '0';
+          });
+        });
+
+        // Xóa heart sau khi animation hoàn thành
+        setTimeout(() => {
+          if (heart.parentNode) {
+            heart.remove();
+          }
+        }, 4000);
+      });
+    }
+
+    // Bắt đầu tạo heart
+    heartInterval = setInterval(createHeart, 300);
+
+    let noMusicStarted = false;
+
+    noBtn.addEventListener("click", () => {
+      // Chỉ bắt đầu phát nhạc lần đầu nhấn, loop xuyên suốt
+      if (!noMusicStarted) {
+        noMusicStarted = true;
+        nhaclanmanAudio.currentTime = 0;
+        nhaclanmanAudio.play().catch(() => {});
+      }
+
+      if (index < imageLinks.length) {
+        // Hiệu ứng đổi ảnh
+        mainImage.style.opacity = '0';
+        mainImage.style.transform = 'scale(0.8) translateZ(0)';
+        setTimeout(() => {
+          mainImage.src = imageLinks[index];
+          mainImage.style.opacity = '1';
+          mainImage.style.transform = 'scale(1) translateZ(0)';
+        }, 200);
+
+        noBtn.textContent = messages[index];
+        index++;
+      } else {
+        noBtn.textContent = "😢 Đừng mà...";
+      }
+
+      yesScale += 0.3;
+      yesBtn.style.transform = `scale(${yesScale}) translateZ(0)`;
+
+      noBtn.classList.remove('shake');
+      void noBtn.offsetWidth; // reset animation
+      noBtn.classList.add('shake');
+      setTimeout(() => noBtn.classList.remove('shake'), 300);
+    });
+
+    yesBtn.addEventListener("click", (e) => {
+      // Ripple effect
+      const circle = document.createElement("span");
+      circle.className = "ripple-circle";
+      circle.style.top = e.offsetY + "px";
+      circle.style.left = e.offsetX + "px";
+      yesBtn.appendChild(circle);
+      setTimeout(() => circle.remove(), 700);
+      // Phát nhạc romantic
+      nhaclanmanAudio.pause();
+      romanticAudio.currentTime = 0;
+      romanticAudio.play().catch(() => {});
+      
+      // Vô hiệu hóa các nút trong thời gian chờ
+      yesBtn.disabled = true;
+      noBtn.disabled = true;
+      
+      // Tụ tất cả heart về mainImage
+      gatherHearts();
+      
+      // Đợi 4 giây trước khi chuyển trang
+      setTimeout(() => {
+        // Flash trắng toàn màn hình
+        const flash = document.createElement("div");
+        flash.style.cssText = "position:fixed;inset:0;background:white;z-index:9999;opacity:1;transition:opacity 0.6s ease;pointer-events:none;";
+        document.body.appendChild(flash);
+        requestAnimationFrame(() => requestAnimationFrame(() => { flash.style.opacity = "0"; }));
+
+        // Reset body sau flash
+        setTimeout(() => {
+          document.body.style.cssText = "margin:0;padding:0;background:none;display:block;animation:none;min-height:unset;overflow:hidden;";
+          document.body.innerHTML = `
+            <style>
+              @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Dancing+Script:wght@700&display=swap');
+
+              *{box-sizing:border-box;margin:0;padding:0;}
+
+              @keyframes bgShift{
+                0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}
+              }
+              @keyframes blobA{
+                0%,100%{transform:translate(0,0) scale(1)}
+                33%{transform:translate(70px,-50px) scale(1.18)}
+                66%{transform:translate(-50px,40px) scale(0.88)}
+              }
+              @keyframes blobB{
+                0%,100%{transform:translate(0,0) scale(1)}
+                40%{transform:translate(-60px,60px) scale(1.22)}
+                75%{transform:translate(50px,-40px) scale(0.85)}
+              }
+              @keyframes blobC{
+                0%,100%{transform:translate(0,0) scale(1)}
+                50%{transform:translate(40px,70px) scale(1.12)}
+              }
+              @keyframes borderRun{
+                0%{background-position:0% 50%}100%{background-position:300% 50%}
+              }
+              @keyframes cardPop{
+                0%{opacity:0;transform:scale(0.6) translateY(60px)}
+                60%{transform:scale(1.06) translateY(-8px)}
+                80%{transform:scale(0.98) translateY(2px)}
+                100%{opacity:1;transform:scale(1) translateY(0)}
+              }
+              @keyframes floatImg{
+                0%,100%{transform:translateY(0) rotate(-1deg)}
+                50%{transform:translateY(-16px) rotate(1deg)}
+              }
+              @keyframes auraGlow{
+                0%,100%{filter:drop-shadow(0 0 14px rgba(233,30,140,0.5)) drop-shadow(0 10px 28px rgba(217,111,133,0.4))}
+                50%{filter:drop-shadow(0 0 32px rgba(233,30,140,0.95)) drop-shadow(0 10px 32px rgba(217,111,133,0.7))}
+              }
+              @keyframes ringRotate{
+                from{transform:rotate(0deg)}to{transform:rotate(360deg)}
+              }
+              @keyframes ringRotateRev{
+                from{transform:rotate(0deg)}to{transform:rotate(-360deg)}
+              }
+              @keyframes shimmer{
+                0%{background-position:-200% center}100%{background-position:200% center}
+              }
+              @keyframes fadeUp{
+                from{opacity:0;transform:translateY(22px)}
+                to{opacity:1;transform:translateY(0)}
+              }
+              @keyframes twinkle{
+                0%,100%{opacity:0;transform:scale(0.3) rotate(0deg)}
+                50%{opacity:1;transform:scale(1) rotate(180deg)}
+              }
+              @keyframes confettiBurst{
+                0%{transform:translate(0,0) scale(1) rotate(0deg);opacity:1}
+                100%{transform:translate(var(--tx),var(--ty)) scale(0) rotate(var(--rot));opacity:0}
+              }
+              @keyframes riseUp{
+                0%{transform:translateY(0) scale(1);opacity:1}
+                100%{transform:translateY(-100vh) scale(0.5);opacity:0}
+              }
+              @keyframes fall{
+                0%{transform:translateY(-60px) rotate(0deg);opacity:.9}
+                100%{transform:translateY(108vh) rotate(720deg);opacity:0}
+              }
+              @keyframes sway{
+                0%,100%{margin-left:0}30%{margin-left:22px}70%{margin-left:-22px}
+              }
+              @keyframes dividerExpand{
+                from{width:0;opacity:0}to{width:60px;opacity:1}
+              }
+
+              body{
+                background:linear-gradient(-45deg,#f9a8c0,#ffd6e7,#ffb3c6,#fce4ec,#f48fb1,#ffd1dc);
+                background-size:400% 400%;
+                animation:bgShift 8s ease infinite;
+                font-family:'Nunito',Arial,sans-serif;
+                overflow-x:hidden;
+                min-height:100vh;
+              }
+
+              /* aurora */
+              .blob{position:fixed;border-radius:50%;filter:blur(75px);pointer-events:none;z-index:0;mix-blend-mode:multiply;}
+              .blob-a{width:420px;height:420px;background:rgba(249,168,192,0.6);top:-100px;left:-100px;animation:blobA 12s ease-in-out infinite;}
+              .blob-b{width:360px;height:360px;background:rgba(244,143,177,0.55);bottom:-80px;right:-80px;animation:blobB 14s ease-in-out infinite;}
+              .blob-c{width:280px;height:280px;background:rgba(206,147,216,0.45);top:45%;left:55%;animation:blobC 10s ease-in-out infinite;}
+
+              /* layout */
+              .result-wrap{
+                min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1;
+              }
+
+              /* viền chạy */
+              .card-border{
+                border-radius:34px;padding:2.5px;
+                background:linear-gradient(90deg,#f48fb1,#e91e8c,#ff4081,#f06292,#ce93d8,#90caf9,#f48fb1,#e91e8c);
+                background-size:300% 300%;
+                animation:borderRun 3.5s linear infinite;
+                box-shadow:0 16px 60px rgba(233,30,140,0.28),0 4px 16px rgba(0,0,0,0.08);
+                max-width:440px;width:100%;
+              }
+
+              .result-card{
+                background:rgba(255,255,255,0.45);
+                backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+                border-radius:32px;
+                padding:48px 36px 44px;
+                text-align:center;
+                position:relative;
+                overflow:hidden;
+                animation:cardPop 0.9s cubic-bezier(0.34,1.56,0.64,1) both;
+                box-shadow:inset 0 1px 0 rgba(255,255,255,0.95);
+              }
+
+              /* shimmer nền card */
+              .result-card::before{
+                content:'';position:absolute;inset:0;
+                background:linear-gradient(135deg,rgba(255,255,255,0.18) 0%,transparent 50%,rgba(255,255,255,0.08) 100%);
+                border-radius:32px;pointer-events:none;
+              }
+
+              /* ring xoay quanh ảnh */
+              .img-wrap{position:relative;display:inline-block;margin-bottom:4px;}
+              .ring{
+                position:absolute;border-radius:50%;pointer-events:none;
+              }
+              .ring-1{
+                inset:-16px;
+                border:2.5px solid transparent;
+                border-top-color:#e91e8c;border-right-color:#ff80ab;
+                animation:ringRotate 3s linear infinite;
+              }
+              .ring-2{
+                inset:-26px;
+                border:1.5px dashed rgba(233,30,140,0.35);
+                animation:ringRotateRev 5s linear infinite;
+              }
+              .ring-3{
+                inset:-38px;
+                border:1px solid transparent;
+                border-bottom-color:rgba(233,30,140,0.25);border-left-color:rgba(233,30,140,0.15);
+                animation:ringRotate 8s linear infinite;
+              }
+
+              .result-img{
+                width:190px;max-width:80%;display:block;
+                animation:floatImg 3.5s ease-in-out infinite, auraGlow 3s ease-in-out infinite;
+                position:relative;z-index:1;
+              }
+
+              /* sparkle dots quanh ảnh */
+              .sparkle{
+                position:absolute;font-size:14px;
+                animation:twinkle 2s ease-in-out infinite;
+                pointer-events:none;
+              }
+
+              /* divider */
+              .result-divider{
+                height:3px;
+                background:linear-gradient(90deg,transparent,#e91e8c,transparent);
+                border-radius:99px;
+                margin:20px auto;
+                animation:dividerExpand 0.8s 0.5s ease both;
+                position:relative;
+              }
+              .result-divider::after{
+                content:'💖';
+                position:absolute;top:50%;left:50%;
+                transform:translate(-50%,-50%);
+                font-size:16px;
+                background:rgba(255,255,255,0.45);
+                padding:0 6px;
+              }
+
+              .result-title{
+                font-size:27px;font-weight:900;
+                background:linear-gradient(90deg,#c2185b,#e91e8c,#ff4081,#ff80ab,#e91e8c,#c2185b,#ff4081);
+                background-size:200% auto;
+                background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+                animation:shimmer 3s linear infinite, fadeUp 0.7s 0.6s ease both;
+                line-height:1.4;
+              }
+              .result-sub{
+                font-size:16px;color:rgba(140,80,110,0.85);
+                letter-spacing:1.5px;
+                animation:fadeUp 0.7s 0.85s ease both;
+                margin-top:8px;
+              }
+              .result-sig{
+                position:absolute;bottom:14px;right:18px;
+                font-size:13px;font-style:italic;font-weight:700;
+                color:rgba(194,24,91,0.4);letter-spacing:0.5px;
+                animation:fadeUp 0.7s 1.1s ease both;
+                font-family:'Dancing Script',cursive;
+                font-size:16px;
+              }
+
+              /* particles rơi */
+              .heart-fall{
+                position:fixed;pointer-events:none;z-index:0;user-select:none;
+                animation:fall linear, sway ease-in-out infinite alternate;
+              }
+              .confetti{
+                position:fixed;pointer-events:none;z-index:10;
+                animation:confettiBurst 1.2s cubic-bezier(0.25,0.46,0.45,0.94) forwards;
+              }
+              .rise-particle{
+                position:fixed;pointer-events:none;z-index:3;
+                animation:riseUp linear forwards;
+              }
+            </style>
+
+            <div class="blob blob-a"></div>
+            <div class="blob blob-b"></div>
+            <div class="blob blob-c"></div>
+
+            <div class="result-wrap">
+              <div class="card-border">
+                <div class="result-card">
+                  <div class="img-wrap">
+                    <div class="ring ring-1"></div>
+                    <div class="ring ring-2"></div>
+                    <div class="ring ring-3"></div>
+                    <img src="image/hug.png" class="result-img" alt="hug">
+                    <span class="sparkle" style="top:-8px;left:-4px;animation-delay:0s">✨</span>
+                    <span class="sparkle" style="top:-4px;right:-8px;animation-delay:0.6s">💫</span>
+                    <span class="sparkle" style="bottom:-6px;left:10px;animation-delay:1.2s">⭐</span>
+                    <span class="sparkle" style="bottom:0;right:4px;animation-delay:0.3s">✨</span>
+                  </div>
+                  <div class="result-divider"></div>
+                  <h1 class="result-title">Cảm ơn Minh Phương yêu! 💖</h1>
+                  <p class="result-sub">Anh yêu em nhiều lắm ♡</p>
+                  <span class="result-sig">~ TugnTugn</span>
+                </div>
+              </div>
+            </div>
+
+            <script>
+              const emojis=["❤️","💖","💗","💕","💞","🩷","💓","💝","🌸","✨","🌺","💐"];
+
+              // Confetti bắn ra mạnh từ nhiều điểm
+              const origins=[
+                {x:50,y:50},{x:20,y:60},{x:80,y:60},{x:35,y:40},{x:65,y:40}
+              ];
+              let count=0;
+              for(let o of origins){
+                for(let i=0;i<16;i++){
+                  setTimeout(()=>{
+                    const c=document.createElement("div");
+                    c.className="confetti";
+                    c.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+                    c.style.fontSize=(18+Math.random()*16)+"px";
+                    const angle=Math.random()*360;
+                    const dist=100+Math.random()*260;
+                    c.style.setProperty("--tx",Math.cos(angle*Math.PI/180)*dist+"px");
+                    c.style.setProperty("--ty",(Math.sin(angle*Math.PI/180)*dist-80)+"px");
+                    c.style.setProperty("--rot",(Math.random()*720-360)+"deg");
+                    c.style.left=o.x+"vw";
+                    c.style.top=o.y+"vh";
+                    c.style.animationDelay=(Math.random()*0.2)+"s";
+                    c.style.animationDuration=(0.9+Math.random()*0.5)+"s";
+                    document.body.appendChild(c);
+                    setTimeout(()=>c.remove(),1800);
+                  }, count*25);
+                  count++;
+                }
+              }
+
+              // Particles nổi lên từ dưới
+              setTimeout(()=>{
+                for(let i=0;i<20;i++){
+                  setTimeout(()=>{
+                    const r=document.createElement("div");
+                    r.className="rise-particle";
+                    r.textContent=emojis[Math.floor(Math.random()*5)];
+                    r.style.fontSize=(20+Math.random()*20)+"px";
+                    r.style.left=Math.random()*100+"vw";
+                    r.style.bottom="0";
+                    r.style.animationDuration=(2+Math.random()*2)+"s";
+                    r.style.animationDelay=(Math.random()*0.5)+"s";
+                    document.body.appendChild(r);
+                    setTimeout(()=>r.remove(),4500);
+                  },i*80);
+                }
+              },600);
+
+              // Tim rơi liên tục
+              function spawnHeart(){
+                const h=document.createElement("div");
+                h.className="heart-fall";
+                h.textContent=emojis[Math.floor(Math.random()*5)];
+                h.style.fontSize=(14+Math.random()*18)+"px";
+                h.style.left=Math.random()*100+"vw";
+                const fd=(2+Math.random()*3).toFixed(2)+"s";
+                const sd=(1.5+Math.random()*2).toFixed(2)+"s";
+                h.style.animationDuration=fd+", "+sd;
+                document.body.appendChild(h);
+                setTimeout(()=>h.remove(),5000);
+              }
+              setInterval(spawnHeart,280);
+            \<\/script>
+          `;
+        }, 300);
+      }, 4000);
+    });
+  </script>
+
+</body>
+</html>
